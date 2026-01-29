@@ -1,0 +1,6 @@
+streamlit
+pandas
+numpy
+pgeocode
+scikit-learn
+lightgbm

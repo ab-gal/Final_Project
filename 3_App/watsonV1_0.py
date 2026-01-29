@@ -4,9 +4,18 @@ import numpy as np
 import pickle
 import pgeocode
 import os
-full_dataset= pd.read_csv(r"..\1_Data\df_cleaned.csv")
-df_cArea_yBuilt= pd.read_csv(r'..\1_data\App\df_lbsm_streamlit.csv')
+# full_dataset= pd.read_csv(r"..\1_Data\df_cleaned.csv")
+# df_cArea_yBuilt= pd.read_csv(r'..\1_data\App\df_lbsm_streamlit.csv')
+# Get the folder where THIS file (watsonV1_0.py) is located
+current_dir = os.path.dirname(os.path.abspath(__file__))
 
+# Construct paths relative to this file
+# Note: Ensure folder names like '1_Data' match your repo EXACTLY (Case Sensitive!)
+path_data = os.path.join(current_dir, '..', '1_Data', 'df_cleaned.csv')
+path_conservation = os.path.join(current_dir, '..', '1_Data', 'App', 'df_lbsm_streamlit.csv')
+
+full_dataset = pd.read_csv(path_data)
+df_cArea_yBuilt = pd.read_csv(path_conservation)
 # --- 1. SETUP ---
 st.set_page_config(page_title="Sherlock Homes", page_icon="🏠")
 
@@ -343,105 +352,6 @@ if st.button("Sherlock it!", type="primary"):
             if freq >= 6: return "✅ This layout is **common in the area**."
             elif freq >= 3: return "ℹ️ This layout is **used in the area**, although not very common."
 
-        # # --- 1. SHOW RECOMMENDATIONS FIRST (Green Boxes) ---
-        # for i, rec in enumerate(advice, 1):
-        #     b, ba, lr = rec['layout']
-        #     price = rec['price']
-        #     freq = rec['freq']
-        #     rec_epc = rec['epc']
-        #     delta = price - real_price
-
-        #     title = "Sherlock's recommendation" if i == 1 else "Alternative recommendation"
-
-        #     # --- UPDATED FORMATTING ---
-        #     # 1. We moved the Price to the TOP (like a metric).
-        #     # 2. We use '###' for the price. It's big, but has less gap than '##'.
-        #     # 3. We moved the Layout/EPC details to the BOTTOM.
-        #     msg = (
-        #         f"### {title}\n"
-        #         f"Estimated Value\n"
-        #         f"### £{price:,.0f}\n"  # Big Number
-        #         # f"Estimated Value\n\n"
-        #         f"**Uplift:** +£{delta:,.0f}\n\n" # Uplift right below
-        #         f"---\n" # Small separator line
-        #         f"**Layout:** {b} Bed · {ba} Bath · {lr} Living\n"
-        #         f" | **EPC rate:** {rec_epc}\n\n"
-        #         # f" | **Uplift:** +£{delta:,.0f}\n\n" # Uplift right below
-        #         f"{freq_text(freq)}\n"
-        #         f"_Market frequency: {freq} / 50 nearest peers_"
-        #     )
-
-        #     st.success(msg)
-        # # --- 1. PREPARE CURRENT VALUES FOR COMPARISON ---
-        # curr_b = input_df['bedrooms'].iloc[0]
-        # curr_ba = input_df['bathrooms'].iloc[0]
-        # curr_lr = input_df['livingRooms'].iloc[0]
-        # curr_e = input_df['currentEnergyRating'].iloc[0]
-
-        # # --- 2. SHOW RECOMMENDATIONS ---
-        # for i, rec in enumerate(advice, 1):
-        #     b, ba, lr = rec['layout']
-        #     price = rec['price']
-        #     freq = rec['freq']
-        #     rec_epc = rec['epc']
-        #     delta = price - real_price
-
-        #     # --- CALCULATE DIFFERENCE TEXT ---
-        #     changes = []
-
-        #     # Check Bedrooms
-        #     if b != curr_b:
-        #         diff = b - curr_b
-        #         changes.append(f"{'+' if diff > 0 else ''}{diff} bedroom{'s' if abs(diff) > 1 else ''}")
-
-        #     # Check Bathrooms
-        #     if ba != curr_ba:
-        #         diff = ba - curr_ba
-        #         changes.append(f"{'+' if diff > 0 else ''}{diff} bathroom{'s' if abs(diff) > 1 else ''}")
-
-        #     # Check Living Rooms
-        #     if lr != curr_lr:
-        #         diff = lr - curr_lr
-        #         changes.append(f"{'+' if diff > 0 else ''}{diff} living room{'s' if abs(diff) > 1 else ''}")
-
-        #     # Check EPC
-        #     if rec_epc != curr_e:
-        #         changes.append(f"an EPC rating of {rec_epc}")
-
-        #     # Join changes into a readable sentence
-        #     if len(changes) > 1:
-        #         change_text = ", ".join(changes[:-1]) + " and " + changes[-1]
-        #     else:
-        #         change_text = "".join(changes)
-
-        #     # --- HANDLE FREQUENCY DISPLAY ---
-        #     # Only show if frequency > 0
-        #     freq_info = ""
-        #     if freq > 2:
-        #         if freq >= 6: 
-        #             f_msg = "✅ This layout is **common in the area**."
-        #         else: 
-        #             f_msg = "ℹ️ This layout is **used in the area**, although not very common."
-
-        #         freq_info = f"{f_msg}\n_Market frequency: {freq} / 50 nearest peers_"
-
-        #     # --- RENDER THE CARD ---
-        #     title = "Sherlock's recommendation" if i == 1 else "Alternative recommendation"
-
-        #     # We construct the "Uplift Sentence" you requested
-        #     uplift_sentence = f"**{change_text}** for an **Uplift +£{delta:,.0f}**"
-
-        #     msg = (
-        #         f"### {title}\n"
-        #         f"Estimated Value\n"
-        #         f"### £{price:,.0f}\n" 
-        #         f"{uplift_sentence}\n\n" 
-        #         f"---\n" 
-        #         f"**Proposed Layout:** {b} Bed · {ba} Bath · {lr} Living | **EPC:** {rec_epc}\n\n"
-        #         f"{freq_info}"
-        #     )
-
-        #     st.success(msg)
         # --- 1. PREPARE CURRENT VALUES ---
         curr_b = input_df['bedrooms'].iloc[0]
         curr_ba = input_df['bathrooms'].iloc[0]
@@ -488,7 +398,7 @@ if st.button("Sherlock it!", type="primary"):
                 else:
                     change_str = all_changes[0]
 
-                uplift_sentence = f"With **{change_str}**, the estimated **Uplift is £{delta:,.0f}**"
+                uplift_sentence = f"With **{change_str}**, the estimated **Uplift is +£{delta:,.0f}**"
 
             # --- FREQUENCY LOGIC ---
             freq_html = ""
