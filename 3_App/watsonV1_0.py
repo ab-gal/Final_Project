@@ -254,6 +254,8 @@ def sherlock_strategic_advisor(user_row, full_dataset, watson_model, epc_choice)
     for b in range(1, 6):
         for ba in range(1, 4):
             for lr in range(1, 3):
+                if user_sqm < 50 and ba > 1:
+                    continue
                 # Physical feasibility
                 if (b * 9) + (ba * 4) + (lr * 12) + 10 > user_sqm:
                     continue
@@ -330,6 +332,8 @@ if st.button("Sherlock it!", type="primary"):
 
     st.metric(label="Estimated Market Value", value=f"£{real_price:,.0f}")
     st.caption(f"📉 50% of similar properties sell between: £{low_bound:,.0f} — £{high_bound:,.0f}")
+    if is_conservation:
+        st.caption("🏛️ **Conservation Area:** This location typically carries a price premium due to its protected heritage.")
 
     # 3. Strategic Layout Advisor Section
     st.divider()
