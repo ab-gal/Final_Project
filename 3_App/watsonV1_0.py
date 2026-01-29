@@ -13,7 +13,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 # Note: Ensure folder names like '1_Data' match your repo EXACTLY (Case Sensitive!)
 path_data = os.path.join(current_dir, '..', '1_Data', 'df_cleaned.csv')
 path_conservation = os.path.join(current_dir, '..', '1_Data', 'App', 'df_lbsm_streamlit.csv')
-
+path_image = os.path.join(current_dir, 'SH2.png')
 full_dataset = pd.read_csv(path_data)
 df_cArea_yBuilt = pd.read_csv(path_conservation)
 # --- 1. SETUP ---
@@ -315,7 +315,7 @@ with col_title:
 
 with col_img:
     # Make sure SH2.png is in the same folder!
-    st.image("SH2.png", width=120) 
+    st.image(path_image, width=120) 
 
 if st.button("Sherlock it!", type="primary"):
     # 1. Generate the input data
