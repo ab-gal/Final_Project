@@ -17,7 +17,7 @@ path_image = os.path.join(current_dir, 'SH2.png')
 full_dataset = pd.read_csv(path_data)
 df_cArea_yBuilt = pd.read_csv(path_conservation)
 # --- 1. SETUP ---
-st.set_page_config(page_title="Sherlock Homes", page_icon="🏠")
+st.set_page_config(page_title="Sherlock Homes", page_icon=path_image)
 
 # Initialize the UK Postcode database (Offline, fast)
 nomi = pgeocode.Nominatim('gb') 
